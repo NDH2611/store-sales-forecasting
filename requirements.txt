@@ -1,0 +1,3 @@
+# Development ranges. Every real run saves exact installed versions to environment.txt.
+# Use Python 3.11 locally; on Kaggle keep the existing compatible torch/CUDA installation.
+-e .[ml,dl,dev]
