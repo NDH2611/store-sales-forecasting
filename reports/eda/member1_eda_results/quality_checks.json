@@ -1,0 +1,17 @@
+{
+  "train_duplicate_key": 0,
+  "test_duplicate_key": 0,
+  "train_duplicate_id": 0,
+  "test_duplicate_id": 0,
+  "stores_duplicate_key": 0,
+  "transactions_duplicate_key": 0,
+  "oil_duplicate_date": 0,
+  "negative_sales": 0,
+  "nonfinite_sales": 0,
+  "negative_promotion_train": 0,
+  "negative_promotion_test": 0,
+  "n_stores": 54,
+  "n_families": 33,
+  "n_series": 1782,
+  "n_test_dates": 16
+}

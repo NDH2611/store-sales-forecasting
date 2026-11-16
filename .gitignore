@@ -14,3 +14,4 @@ outputs/*
 *.parquet
 *.zip
 .DS_Store
+*.egg-info/

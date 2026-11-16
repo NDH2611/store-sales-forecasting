@@ -1,0 +1,10 @@
+{
+  "raw_rows": 83488,
+  "eda_rows": 81760,
+  "duplicate_date_store": 0,
+  "missing_cells": 0,
+  "negative_transactions_eda": 0,
+  "zero_transactions_eda": 0,
+  "nonfinite_transactions_eda": 0,
+  "unknown_stores": []
+}

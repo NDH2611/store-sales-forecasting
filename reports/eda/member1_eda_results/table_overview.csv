@@ -1,0 +1,8 @@
+table,rows,columns,missing_cells,exact_duplicate_rows,date_min,date_max
+train,3000888,6,0,0,2013-01-01,2017-08-15
+test,28512,5,0,0,2017-08-16,2017-08-31
+stores,54,5,0,0,,
+holidays_events,350,6,0,0,2012-03-02,2017-12-26
+oil,1218,2,43,0,2013-01-01,2017-08-31
+transactions,83488,3,0,0,2013-01-01,2017-08-15
+sample_submission,28512,2,0,0,,
