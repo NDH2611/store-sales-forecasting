@@ -1,0 +1,4 @@
+check,status
+holiday_matches_eda,PASS
+oil_history_matches_eda,PASS
+oil_forecast_matches_eda,PASS
