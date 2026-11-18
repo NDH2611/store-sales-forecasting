@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from store_sales.data import load_panel, validate_rows
-from store_sales.evaluate import rmsle, score, submission, validate_submission
+from store_sales.evaluate import prediction_frame, rmsle, score, submission, validate_submission
 from store_sales.features import origin_dates, seasonal_naive, tabular, window
 
 
@@ -86,6 +86,54 @@ class CoreTests(unittest.TestCase):
         result = score(self.panel, self.cutoff, prediction, self.path)
         self.assertAlmostEqual(result["rmsle"], 0)
         self.assertEqual(result["n"], 64)
+
+    def test_score_excludes_missing_validation_targets_without_imputing_zero(self):
+        prediction = seasonal_naive(self.panel, self.cutoff, 16)
+        validation_date = pd.Timestamp(self.cutoff) + pd.Timedelta(days=1)
+        missing_key = ((self.panel.train.date == validation_date) &
+                       (self.panel.train.store_nbr == 1) &
+                       (self.panel.train.family == "A"))
+        self.panel.train = self.panel.train.loc[~missing_key].copy()
+        result = score(self.panel, self.cutoff, prediction, self.path)
+        self.assertEqual(result["n"], 63)
+        self.assertEqual(result["n_forecast_expected"], 64)
+        self.assertEqual(result["n_actual_observed"], 63)
+        self.assertEqual(result["n_target_missing"], 1)
+        self.assertAlmostEqual(result["target_coverage_pct"], 100 * 63 / 64)
+        scored = pd.read_csv(self.path / "validation_predictions.csv")
+        self.assertEqual(len(scored), 63)
+        self.assertFalse(((scored.date == str(validation_date.date())) &
+                          (scored.store_nbr == 1) & (scored.family == "A")).any())
+
+    def test_score_errors_when_an_observed_actual_has_no_prediction(self):
+        from unittest.mock import patch
+
+        prediction = seasonal_naive(self.panel, self.cutoff, 16)
+        incomplete = prediction_frame(self.panel, self.cutoff, prediction).iloc[1:].copy()
+        with patch("store_sales.evaluate.prediction_frame", return_value=incomplete):
+            with self.assertRaisesRegex(ValueError, "missing keys with observed actuals"):
+                score(self.panel, self.cutoff, prediction, self.path)
+
+    def test_score_key_alignment_preserves_actual_order(self):
+        from unittest.mock import patch
+
+        prediction = seasonal_naive(self.panel, self.cutoff, 16)
+        shuffled = prediction_frame(self.panel, self.cutoff, prediction).sample(
+            frac=1, random_state=7
+        )
+        with patch("store_sales.evaluate.prediction_frame", return_value=shuffled):
+            result = score(self.panel, self.cutoff, prediction, self.path)
+        expected_keys = self.panel.train.loc[
+            (self.panel.train.date > pd.Timestamp(self.cutoff)) &
+            (self.panel.train.date <= pd.Timestamp(self.cutoff) + pd.Timedelta(days=16)),
+            ["date", "store_nbr", "family"],
+        ].reset_index(drop=True)
+        scored_keys = pd.read_csv(self.path / "validation_predictions.csv",
+                                  parse_dates=["date"])[
+                                      ["date", "store_nbr", "family"]
+                                  ].reset_index(drop=True)
+        pd.testing.assert_frame_equal(scored_keys, expected_keys)
+        self.assertAlmostEqual(result["rmsle"], 0)
 
     def test_submission_checks_and_alignment(self):
         cutoff = self.panel.train.date.max()
