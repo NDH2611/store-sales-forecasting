@@ -53,12 +53,27 @@ Không bao gồm mô hình Deep Learning (LSTM/Neural Networks) hay dữ liệu 
 
 Gói bàn giao được tổ chức thành 2 phần rõ ràng giữa mã nguồn và kết quả thực nghiệm:
 
-src/store_sales/features.py: Trích xuất ma trận đặc trưng dạng bảng (tabular) cho huấn luyện và dự báo.
-src/store_sales/models.py: Định nghĩa và huấn luyện mô hình LightGBM thuần Machine Learning.
-src/store_sales/run.py: Điều phối huấn luyện, đánh giá 3 folds và xuất log tự động.
-configs/*.json: 8 file cấu hình cốt lõi (opt_730_l63_mcs35_r eg, opt_730_samp0806, opt_800_holoil_best, holiday_smooth, default, lgbm_no_history, lgbm_no_promo, smoke)
-\reports\lightgbm\Member2_resultsdocs/MEMBER2_BAN_GIAO.md:bảng tổng hợp, dữ liệu cái lần chạy, Checkpoint & Dự báo Validation
+- src/store_sales/features.py: Trích xuất ma trận đặc trưng - - dạng bảng (tabular) cho huấn luyện và dự báo.
+- src/store_sales/models.py: Định nghĩa và huấn luyện mô hình - LightGBM thuần Machine Learning.
+- src/store_sales/run.py: Điều phối huấn luyện, đánh giá 3 - - folds và xuất log tự động.
+- configs/*.json: 8 file cấu hình cốt lõi (opt_730_l63_mcs35_r eg, opt_730_samp0806, opt_800_holoil_best, holiday_smooth, default, lgbm_no_history, lgbm_no_promo, smoke)
+- \reports\lightgbm\Member2_resultsdocs/MEMBER2_BAN_GIAO.md:bảng tổng hợp, dữ liệu cái lần chạy, Checkpoint & Dự báo Validation
  hướng dẫn sử dụng và giới hạn.
+
+ ## 5. Trả lời các câu hỏi nghiên cứu của TV2 (E0 – E8)
+
+Dưới đây là tổng hợp kết quả giải đáp các câu hỏi thực nghiệm thuộc phạm vi phụ trách của **TV2** (và phần phối hợp **TV1 + TV2**):
+
+| ID | Câu hỏi nghiên cứu | Thực nghiệm đối chiếu | Kết luận & Bằng chứng thực nghiệm |
+|---|---|---|---|
+| **E0** | **Luồng có đúng?** | Baseline trên 3 folds (`2017-06-12`, `2017-06-28`, `2017-07-14`) | **Đúng.** Pipeline trích xuất cửa sổ nhân quả (`window`, `tabular`) chạy thông suốt trên toàn bộ 1.782 chuỗi, không rò rỉ dữ liệu tương lai, không trùng/lệch chỉ mục thời gian sau khi sửa lỗi `promo_log` và xuất khớp định dạng dự báo 16 ngày. |
+| **E1** | **ML có vượt baseline?** | LightGBM starter (`default`) vs Baseline thống kê | **Có, vượt trội rõ rệt.** LightGBM học được đồng thời tương tác chéo giữa chu kỳ tuần, lịch sử trễ và khuyến mãi trên toàn bộ 1.782 chuỗi, kéo giảm mạnh sai số RMSLE trên cả 3 folds so với các mốc baseline đơn biến/tĩnh. |
+| **E3** | **Lịch sử hữu ích bao nhiêu?** | LightGBM `full` vs `lgbm_no_history` | **Rất quan trọng (yếu tố nền tảng).** Khi loại bỏ toàn bộ đặc trưng trễ (`lag_1, 7, 14, 28`) và thống kê cuộn (`mean, std, median`), điểm RMSLE suy giảm nghiêm trọng do mô hình mất khả năng định vị mức nền doanh số riêng của từng cặp cửa hàng – nhóm hàng. |
+| **E4** | **Khuyến mãi hữu ích bao nhiêu?** | LightGBM `full` vs `lgbm_no_promo` | **Hữu ích cao cho biến động ngắn hạn.** Biến `onpromotion` tương lai đã biết trước giúp mô hình bắt chính xác các nhịp tăng vọt đột biến; bỏ đặc trưng này làm tăng rõ rệt sai số ở các nhóm hàng nhạy cảm với khuyến mãi. |
+| **E7** | **Bảng phụ có ích?** *(TV1 + TV2)* | Thêm `holiday` (đúng locale/transfer) và thử `oil` (`holiday_oil`) | **Có ích rõ rệt về độ ổn định.** Bổ sung cờ ngày lễ chuẩn phạm vi cửa hàng (`National/Regional/Local`, xử lý `transfer`) giúp giảm sai số ở các giai đoạn lễ chuyển tiếp; kết hợp thêm giá dầu nhân quả (`<= cutoff`) trên cửa sổ 800 ngày (`opt_800_holoil_best`) mang lại hiệu quả bổ trợ tốt. |
+| **E8** | **Kết quả có ổn định?** | Đánh giá độ lệch chuẩn qua 3 folds & khóa seed (`seed = 42`) | **Ổn định.** Trong thiết lập tiêu chuẩn, toàn bộ quá trình huấn luyện được khóa `seed = 42` giúp kết quả tái lập 100%; các kỹ thuật `subsample = 0.8`, `colsample_bytree = 0.6` và regularization (`reg_alpha = 0.1`, `reg_lambda = 1.0`) giúp giảm phương sai (`std` RMSLE) giữa 3 giai đoạn cắt khác nhau. *(Việc mở rộng chạy đa seed `42/123/2026` có thể thực hiện thêm khi tổng hợp cuối).* |
+
+
 
 
 ## 6. Hướng dẫn tái lập kết quả & Nạp Checkpoint
@@ -91,5 +106,3 @@ pred_sales = np.expm1(pred_log)
 - **Kiểm chứng tái lập:** Mọi cấu hình đều khóa `seed = 42`; chạy lại trên cùng môi trường cho kết quả RMSLE trùng khớp tuyệt đối.
 - **Giới hạn hiện tại:** Mô hình sử dụng chiến lược dự báo trực tiếp theo cấu trúc bảng toàn cục (global tabular LightGBM); chưa áp dụng kết hợp (ensembling) đa họ mô hình (CatBoost/XGBoost/Ridge) hoặc hậu xử lý riêng cho nhóm chuỗi có tỷ lệ doanh số bằng 0 kéo dài.
 ```
-
-Bạn có thể lưu nội dung này thành file `docs/REPORT_SUMMARY.md` (hoặc đặt ngay tại thư mục gốc `REPORT_SUMMARY.md` và trong `project_handover/`) để đồng bộ hoàn toàn với tài liệu `MEMBER1_BAN_GIAO.md` của nhóm.
