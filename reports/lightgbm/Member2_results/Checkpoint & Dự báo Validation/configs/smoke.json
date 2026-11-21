@@ -1,0 +1,14 @@
+{
+  "seed": 42,
+  "horizon": 16,
+  "lookback": 28,
+  "train_days": 64,
+  "stride": 16,
+  "feature_set": "full",
+  "lightgbm": {
+    "n_estimators": 10,
+    "learning_rate": 0.1,
+    "num_leaves": 7,
+    "n_jobs": 2
+  }
+}

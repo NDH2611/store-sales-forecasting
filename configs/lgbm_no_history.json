@@ -1,20 +1,14 @@
 {
-    "seed": 42,
-    "horizon": 16,
-    "lookback": 56,
-    "train_days": 365,
-    "stride": 16,
-    "feature_set": "no_history",
-    "lightgbm": {
-        "n_estimators": 300,
-        "learning_rate": 0.05,
-        "num_leaves": 31,
-        "n_jobs": 2
-    },
-    "lstm": {
-        "hidden_size": 64,
-        "epochs": 10,
-        "batch_size": 512,
-        "learning_rate": 0.001
-    }
+  "seed": 42,
+  "horizon": 16,
+  "lookback": 56,
+  "train_days": 365,
+  "stride": 16,
+  "feature_set": "no_history",
+  "lightgbm": {
+    "n_estimators": 300,
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "n_jobs": 2
+  }
 }

@@ -1,0 +1,47 @@
+{
+  "model": "lightgbm",
+  "cutoff": "2017-06-12",
+  "config": {
+    "seed": 42,
+    "horizon": 16,
+    "lookback": 56,
+    "train_days": 730,
+    "stride": 16,
+    "feature_set": "holiday",
+    "lightgbm": {
+      "n_estimators": 1400,
+      "learning_rate": 0.025,
+      "num_leaves": 63,
+      "n_jobs": 2,
+      "max_depth": -1,
+      "min_child_samples": 35,
+      "subsample": 0.8,
+      "subsample_freq": 1,
+      "colsample_bytree": 0.6,
+      "reg_alpha": 0.1,
+      "reg_lambda": 1.0
+    },
+    "lstm": {
+      "hidden_size": 64,
+      "epochs": 10,
+      "batch_size": 512,
+      "learning_rate": 0.001
+    },
+    "early_stopping_rounds": null
+  },
+  "git_sha": "b27c74bb8258d46d4ef5ad480382167bc128e38c",
+  "git_dirty": true,
+  "data_sha256": {
+    "train.csv": "99a1b7f4241821df10fa71f23abdd71c634f71f901e3cab1400c0f0c583f862c",
+    "test.csv": "087ec1ecec76dbba9ea2adb48b8b2fd527c7c59adb82b0dfb9f6f82739400d26",
+    "stores.csv": "af503b2bce11d7906d249f81cc0598f10e2addcc9f6c59aa2d95c9f2652c296b"
+  },
+  "metrics": {
+    "rmsle": 0.3892304325484629,
+    "mae": 62.84773832206985,
+    "n": 28512
+  },
+  "total_seconds": 168.39347780000026,
+  "python": "3.11.9",
+  "note": "Runtime includes load, fit and predict; not isolated train time."
+}

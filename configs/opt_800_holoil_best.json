@@ -1,0 +1,22 @@
+{
+  "seed": 42,
+  "horizon": 16,
+  "lookback": 56,
+  "train_days": 800,
+  "stride": 16,
+  "feature_set": "holiday_oil",
+  "lightgbm": {
+    "n_estimators": 1400,
+    "learning_rate": 0.025,
+    "num_leaves": 63,
+    "n_jobs": 2,
+    "max_depth": -1,
+    "min_child_samples": 35,
+    "subsample": 0.8,
+    "subsample_freq": 1,
+    "colsample_bytree": 0.6,
+    "reg_alpha": 0.1,
+    "reg_lambda": 1.0
+  },
+  "early_stopping_rounds": null
+}
