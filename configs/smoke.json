@@ -5,6 +5,10 @@
   "train_days": 64,
   "stride": 16,
   "feature_set": "full",
-  "lightgbm": {"n_estimators": 10, "learning_rate": 0.1, "num_leaves": 7, "n_jobs": 2},
-  "lstm": {"hidden_size": 16, "epochs": 1, "batch_size": 64, "learning_rate": 0.001}
+  "lightgbm": {
+    "n_estimators": 10,
+    "learning_rate": 0.1,
+    "num_leaves": 7,
+    "n_jobs": 2
+  }
 }

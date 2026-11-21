@@ -1,0 +1,13 @@
+run_id,model,config,cutoff,rmsle,mae,seconds
+E0_baseline_fold1,baseline,default.json,2017-06-12,0.44472,68.06,7.18
+E0_baseline_fold2,baseline,default.json,2017-06-28,0.42452,65.211,6.01
+E0_baseline_fold3,baseline,default.json,2017-07-14,0.44268,65.136,5.83
+E1_lgbm_full_fold1,lightgbm,default.json,2017-06-12,0.39297,64.898,20.89
+E1_lgbm_full_fold2,lightgbm,default.json,2017-06-28,0.38809,65.833,18.22
+E1_lgbm_full_fold3,lightgbm,default.json,2017-07-14,0.40907,67.763,18.48
+E3_lgbm_no_history_fold1,lightgbm,lgbm_no_history.json,2017-06-12,0.55839,75.15,16.65
+E3_lgbm_no_history_fold2,lightgbm,lgbm_no_history.json,2017-06-28,0.54728,80.946,16.0
+E3_lgbm_no_history_fold3,lightgbm,lgbm_no_history.json,2017-07-14,0.59269,81.353,16.0
+E4_lgbm_no_promo_fold1,lightgbm,lgbm_no_promo.json,2017-06-12,0.39855,66.79,17.2
+E4_lgbm_no_promo_fold2,lightgbm,lgbm_no_promo.json,2017-06-28,0.39243,71.12,17.07
+E4_lgbm_no_promo_fold3,lightgbm,lgbm_no_promo.json,2017-07-14,0.42093,69.823,17.14

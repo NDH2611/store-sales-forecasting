@@ -1,0 +1,28 @@
+{
+  "seed": 42,
+  "horizon": 16,
+  "lookback": 56,
+  "train_days": 450,
+  "stride": 16,
+  "feature_set": "holiday",
+  "lightgbm": {
+    "n_estimators": 2500,
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "n_jobs": 2,
+    "max_depth": -1,
+    "min_child_samples": 20,
+    "subsample": 1.0,
+    "subsample_freq": 1,
+    "colsample_bytree": 1.0,
+    "reg_alpha": 0.0,
+    "reg_lambda": 0.0
+  },
+  "lstm": {
+    "hidden_size": 64,
+    "epochs": 10,
+    "batch_size": 512,
+    "learning_rate": 0.001
+  },
+  "early_stopping_rounds": 50
+}
