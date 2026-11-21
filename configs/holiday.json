@@ -1,0 +1,22 @@
+{
+    "horizon": 16,
+    "lookback": 28,
+    "stride": 1,
+    "seed": 42,
+    "feature_set": "holiday",
+    "lightgbm": {
+        "n_estimators": 500,
+        "learning_rate": 0.05,
+        "num_leaves": 31,
+        "subsample_for_bin": 50000,
+        "colsample_bytree": 0.8,
+        "subsample": 0.8,
+        "n_jobs": -1
+    },
+    "lstm": {
+        "hidden_size": 64,
+        "batch_size": 256,
+        "learning_rate": 0.001,
+        "epochs": 15
+    }
+}
