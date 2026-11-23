@@ -9,6 +9,7 @@ import pandas as pd
 from .data import load_panel
 from .features import tabular, window
 
+from .models import _build_aux_context, _window_aux
 
 def explain_tree(panel, run, config, cutoff):
     import lightgbm as lgb
@@ -17,8 +18,18 @@ def explain_tree(panel, run, config, cutoff):
     import matplotlib.pyplot as plt
     import shap
 
-    hist, future, _ = window(panel, cutoff, config["lookback"], config["horizon"])
-    frame = tabular(panel, hist, future, config["feature_set"])
+    hist, future, _ = window(
+    panel, cutoff, config["lookback"], config["horizon"]
+)
+
+    # Rebuild auxiliary features exactly as in model training.
+    aux_context = _build_aux_context(panel, config)
+    aux = _window_aux(panel, cutoff, config["horizon"], aux_context)
+
+    # Rebuild the complete feature matrix, including holiday flags.
+    frame = tabular(
+    panel, hist, future, config["feature_set"], aux=aux
+)
     ids = np.random.default_rng(config["seed"]).choice(len(frame), min(512, len(frame)), replace=False)
     sample = frame.iloc[ids]
     model = lgb.Booster(model_file=str(run/"lightgbm.txt"))
@@ -110,6 +121,7 @@ def main():
     parser.add_argument("--run", required=True, type=Path)
     args = parser.parse_args()
     info = json.loads((args.run/"run.json").read_text())
+    info["config"]["_data_dir"] = str(args.data)
     if not (args.run/"validation_predictions.csv").exists():
         parser.error("Explain a saved validation run; select report cases with known outcomes")
     panel = load_panel(args.data)
