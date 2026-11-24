@@ -3,3 +3,5 @@
 *.sh text eol=lf
 *.md text eol=lf
 *.ipynb text eol=lf
+reports/lightgbm/**/checkpoints/*.txt text eol=lf
+reports/xai/**/lightgbm.txt text eol=lf

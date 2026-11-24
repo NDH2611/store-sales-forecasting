@@ -1,0 +1,1 @@
+SHAP explains raw model log1p(sales), before expm1 and nonnegative clipping. Sampled validation rows; three random examples are a starter. For report add typical/promotion/large-error cases with keys. Associations explain this model, not causal effects.

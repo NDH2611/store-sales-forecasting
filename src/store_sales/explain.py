@@ -30,15 +30,27 @@ def explain_tree(panel, run, config, cutoff):
     frame = tabular(
     panel, hist, future, config["feature_set"], aux=aux
 )
+    model = lgb.Booster(model_file=str(run/"lightgbm.txt"))
+    model_features = model.feature_name()
+    missing = [name for name in model_features if name not in frame.columns]
+    if missing:
+        raise ValueError(f"Reconstructed features missing from checkpoint schema: {missing}")
+    # Checkpoints can predate later feature additions. SHAP must receive the
+    # exact trained schema, including order; never pass newer unused columns.
+    frame = frame.loc[:, model_features]
+    if frame.columns.tolist() != model_features:
+        raise ValueError("Reconstructed feature names/order differ from checkpoint")
     ids = np.random.default_rng(config["seed"]).choice(len(frame), min(512, len(frame)), replace=False)
     sample = frame.iloc[ids]
-    model = lgb.Booster(model_file=str(run/"lightgbm.txt"))
     values = shap.TreeExplainer(model)(sample)
     pd.DataFrame({"feature": frame.columns, "mean_abs_shap": np.abs(values.values).mean(axis=0)}).sort_values(
         "mean_abs_shap", ascending=False).to_csv(run/"xai_global.csv", index=False)
     key = panel.groups.to_frame(index=False).iloc[ids//config["horizon"]].reset_index(drop=True)
     key["horizon"] = ids % config["horizon"] + 1
-    pd.concat([key, pd.DataFrame(values.values, columns=frame.columns)], axis=1).to_csv(
+    shap_frame = pd.DataFrame(
+        values.values, columns=[f"shap_{name}" for name in frame.columns]
+    )
+    pd.concat([key, shap_frame], axis=1).to_csv(
         run/"xai_shap_values.csv", index=False)
     shap.plots.beeswarm(values, show=False, max_display=15)
     plt.tight_layout()
