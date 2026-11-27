@@ -2,9 +2,10 @@
 
 **VS Code viết code → GitHub lưu code/review → Kaggle chạy, lưu phiên bản và submit.**
 
-Khung khởi đầu cho nhóm 4 người: Seasonal Naive, LightGBM và LSTM dự báo 16 ngày;
+Khung dự án cho nhóm 4 người: Seasonal Naive, LightGBM và LSTM dự báo 16 ngày;
 kiểm tra dữ liệu/pipeline; lưu run; SHAP hoặc Integrated Gradients cho mô hình tốt nhất.
-Chưa có dữ liệu thật hay điểm Kaggle trong bộ khung. Đây chưa phải bài đã hoàn thành.
+Workspace hiện có dữ liệu thật và một số kết quả validation cục bộ; dữ liệu thô không được
+lưu trong Git và chưa có điểm Kaggle được ghi nhận. Đây chưa phải bài đã hoàn thành.
 
 ## Đọc theo thứ tự
 
@@ -12,6 +13,7 @@ Chưa có dữ liệu thật hay điểm Kaggle trong bộ khung. Đây chưa ph
 2. [Thiết lập Windows, VS Code, GitHub và Kaggle](docs/THIET_LAP.md).
 3. [Thiết kế thực nghiệm và XAI](docs/THUC_NGHIEM.md).
 4. [Hợp đồng dữ liệu và giới hạn starter](docs/DU_LIEU.md).
+5. [Báo cáo TV4: Evaluation và XAI](docs/TV4_EVALUATION_XAI.md).
 
 ## Bắt đầu trên Windows PowerShell
 
